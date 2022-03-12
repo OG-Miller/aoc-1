@@ -4,26 +4,24 @@ use std::fs::read_to_string;
 // return the number of how many times the depth increases (how many times the number goes up)
 
 fn main() {
-    let data_raw = read_to_string("./data.txt").unwrap();
-    let data_string_vec: Vec<&str> = data_raw.split("\n").collect(); // this leaves an empty string at the last index
+    fn string_vec_to_num_vec(v: Vec<&str>) -> Vec<u32> {
+        let mut num_vec: Vec<u32> = Vec::new();
+        v.iter().for_each(|s| {
+            if s.len() != 0 {
+                num_vec.push(s.parse::<u32>().unwrap())
+            }
+        });
+        num_vec
+    }
 
-    println!("data_string_vec: {:?}", data_string_vec);
+    let data_string = read_to_string("./data.txt").unwrap();
+    let data_string_split = data_string.split("\n").collect();
+    let number_vec: Vec<u32> = string_vec_to_num_vec(data_string_split);
 
     let mut count: u32 = 0;
     let mut stored: u32 = 0;
 
-    // hold new vec of u32s from strings
-    let mut data_num_vec: Vec<u32> = Vec::new();
-
-    // convert strings into nums
-    for val in data_string_vec.iter() {
-        if val.len() != 0 {
-            let parsed = val.parse::<u32>().unwrap();
-            data_num_vec.push(parsed);
-        }
-    }
-
-    for (i, val) in data_num_vec.iter().enumerate() {
+    for (i, val) in number_vec.iter().enumerate() {
         // val at first index just gets stored
         if i == 0 {
             stored = val.clone();
