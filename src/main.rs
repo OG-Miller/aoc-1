@@ -33,4 +33,26 @@ fn main() {
     }
 
     println!("count: {count}");
+
+    ///////////////////////////////////////////////////////////////////
+    // advent of code day 1 Part B
+    // return the number of times the depth (in groups of 3) increases
+    ///////////////////////////////////////////////////////////////////
+
+    let mut count2: u32 = 0;
+    let mut stored_total: u32 = 0;
+
+    for (i, val) in number_vec.iter().enumerate() {
+        if i == 0 {
+            stored_total = val + number_vec[i + 1] + number_vec[i + 2];
+        } else if i < (number_vec.len() - 2) {
+            let current_group_total = val + number_vec[i + 1] + number_vec[i + 2];
+            if current_group_total > stored_total {
+                count2 += 1;
+            }
+            stored_total = current_group_total;
+        }
+    }
+
+    println!("count2: {count2}");
 }
