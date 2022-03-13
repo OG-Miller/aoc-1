@@ -1,58 +1,48 @@
 use std::fs::read_to_string;
 
-// advent of code day 1
-// return the number of how many times the depth increases (how many times the number goes up)
+// advent of code day 2
+// calculate the final horizontal & depth positions, return them multiplied together
 
 fn main() {
+    struct Position {
+        depth: u8,
+        horizontal: u8,
+    }
+    // overall position to be updated
+    let mut store_position = Position {
+        depth: 0,
+        horizontal: 0,
+    };
+    #[derive(Debug)]
+    struct Command {
+        direction: String,
+        val: u8,
+    }
+
     let data_string = read_to_string("./data.txt").unwrap();
-    let data_string_split = data_string.split("\n").collect();
-    let number_vec: Vec<u32> = string_vec_to_num_vec(data_string_split);
+    let data_string_split: Vec<&str> = data_string.split("\n").collect();
+    //println!("{:?}", data_string_split); // eg  ["forward 8", "down 6", "down 6"]
 
-    fn string_vec_to_num_vec(v: Vec<&str>) -> Vec<u32> {
-        let mut num_vec: Vec<u32> = Vec::new();
-        v.iter().for_each(|s| {
-            if s.len() != 0 {
-                num_vec.push(s.parse::<u32>().unwrap())
-            }
+    let command_vec_result: Vec<Command> = string_vec_to_command_vec(data_string_split);
+    println!("command_vec_result: {:?}", command_vec_result);
+
+    fn string_vec_to_command_vec(string_vec: Vec<&str>) -> Vec<Command> {
+        let mut inner_command_vec: Vec<Command> = vec![];
+
+        string_vec.iter().for_each(|s| {
+            let dir_and_val_string_vec: Vec<&str> = s.split(" ").collect();
+            // build current_command
+            let current_command = Command {
+                direction: String::from(dir_and_val_string_vec[0]),
+                val: if s.len() > 0 {
+                    dir_and_val_string_vec[1].parse::<u8>().unwrap()
+                } else {
+                    0
+                },
+            };
+            inner_command_vec.push(current_command);
         });
-        num_vec
+        // return vec of commands
+        inner_command_vec
     }
-
-    let mut count: u32 = 0;
-    let mut stored: u32 = 0;
-
-    for (i, val) in number_vec.iter().enumerate() {
-        // val at first index just gets stored
-        if i == 0 {
-            stored = val.clone();
-        }
-        if val > &stored {
-            count += 1;
-        }
-        stored = val.clone();
-    }
-
-    println!("count: {count}");
-
-    ///////////////////////////////////////////////////////////////////
-    // advent of code day 1 Part B
-    // return the number of times the depth (in groups of 3) increases
-    ///////////////////////////////////////////////////////////////////
-
-    let mut count2: u32 = 0;
-    let mut stored_total: u32 = 0;
-
-    for (i, val) in number_vec.iter().enumerate() {
-        if i == 0 {
-            stored_total = val + number_vec[i + 1] + number_vec[i + 2];
-        } else if i < (number_vec.len() - 2) {
-            let current_group_total = val + number_vec[i + 1] + number_vec[i + 2];
-            if current_group_total > stored_total {
-                count2 += 1;
-            }
-            stored_total = current_group_total;
-        }
-    }
-
-    println!("count2: {count2}");
 }
