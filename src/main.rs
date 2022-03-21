@@ -3,10 +3,11 @@ use std::fs::read_to_string;
 fn main() {
     // AOC Day3A
     let data_string = read_to_string("./data.txt").unwrap();
-    let commons_result = one(data_string);
+    let line_count_div_2: u64 = &data_string.lines().count().try_into().unwrap() / 2 as u64;
+    let commons_result = zeros_per_column(data_string);
     let gamma: String = commons_result
         .into_iter()
-        .map(|x| if x > 500 { "0" } else { "1" })
+        .map(|x| if x > line_count_div_2 { "0" } else { "1" })
         .collect();
 
     let epsilon: String = gamma
@@ -21,7 +22,7 @@ fn main() {
     println!("solution: {:?}", solution);
 }
 
-pub fn one(s: String) -> Vec<u64> {
+pub fn zeros_per_column(s: String) -> Vec<u64> {
     let mut commons_vec: Vec<u64> = vec![0; 12];
     let mut index: usize = 0;
     let mut num_of_zeros: u64 = 0;
