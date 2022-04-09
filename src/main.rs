@@ -1,21 +1,8 @@
-use std::fs::read;
 use std::fs::read_to_string;
 // AOC Day4A
 
 fn main() {
-    //-----------------------------------------------------------------------
-    // after the 4th number is called, a win is possible so start the checks
-    //
-    // checks: (per board)
-    // for each called number, take a board and check line by line if it matches,
-    // if yes: check if number to the right is in the called number list
-    // !(only numbers up to the current called number)
-    // if index 0 matches: keep counting  (no index zero then quit the line)
-    // if no line match, go to column match check:
-    // for each line check if index 0 is a match, yes? keep going, no, quit column
-    //-----------------------------------------------------------------------
-
-    //-------------  Build backlog of numbers to call -----------------------------------
+    //-------------  Build backlog of numbers to call -------------------------------
 
     let data_string = read_to_string("./4a-numbers.txt").unwrap();
 
@@ -26,9 +13,9 @@ fn main() {
         .collect::<Vec<u8>>();
     println!("backlog_nums: {:?}", backlog_nums);
 
-    //----------------- Build boards ---------------------------------------------------
+    //----------------- Build one vec of boards nums ---------------------------------
 
-    let boards_string = read_to_string("./test-data.txt").unwrap();
+    let boards_string = read_to_string("./4a-bingo-boards.txt").unwrap();
     let alternative = boards_string.replace("\n", ",");
     let replace_spaces = alternative.replace(",", " ");
     let split_stuff = replace_spaces.split(" ").collect::<Vec<&str>>();
@@ -40,22 +27,56 @@ fn main() {
         .iter()
         .map(|x| x.parse::<u8>().unwrap())
         .collect::<Vec<u8>>();
-    println!("all_board_nums{:?}", all_board_nums);
 
-    let result = build_single_row(all_board_nums);
-    println!("result{:?}", result);
+    // let all_boards_vec = build_vec_of_boards(all_board_nums, Vec::new());
+    // println!("all_boards_vec: {:?}", all_boards_vec);
+    // println!("first board: {:?}", all_boards_vec[0]);
+
+    //---------- Build vec of board number tuples with 'picked' bool (u8,bool) -----------
+
+    let tuple_vec = all_boards_tuple(all_board_nums);
+    let check_all_boards = backlog_nums
+        .iter()
+        .map(|&n| check_backlog_against_boards(&tuple_vec, n))
+        .collect::<Vec<(u8, bool)>>();
+    println!("check_all_boards: {:?}", check_all_boards);
 }
 
-fn build_single_row(boards: Vec<u8>) -> Vec<u8> {
-    //let mut board_vec: Vec<Vec<u8>> = Vec::new();
-    let mut count: u8 = 0;
-    let mut row_vec: Vec<u8> = Vec::new();
-    boards.iter().enumerate().for_each(|(i, &n)| {
-        if count < 5 {
-            println!("n: {:?}", &n);
-            count += 1;
-            row_vec.push(n);
+//---------- Build vec of boards -------------------------------------
+
+fn build_vec_of_boards(all_boards: Vec<u8>, ret_vec: Vec<Vec<u8>>) -> Vec<Vec<u8>> {
+    let mut return_vec: Vec<Vec<u8>> = ret_vec;
+    let split = all_boards.split_at(25);
+    return_vec.push(split.0.to_vec());
+    let remaining_boards = split.1.to_vec();
+    if remaining_boards.len() > 25 {
+        build_vec_of_boards(remaining_boards, return_vec)
+    } else {
+        return_vec
+    }
+}
+
+//--- take all boards (flat) and initialise with (n, false) ---------------
+
+pub fn all_boards_tuple(boards: Vec<u8>) -> Vec<(u8, bool)> {
+    let mut checked_tuple_vec: Vec<(u8, bool)> = Vec::new();
+    boards
+        .iter()
+        .for_each(|n| checked_tuple_vec.push((*n, false)));
+    checked_tuple_vec
+}
+
+//------ for each backlog_nums------------------------------------
+
+pub fn check_backlog_against_boards(tuple_boards: &Vec<(u8, bool)>, backlog_num: u8) -> (u8, bool) {
+    //let mut checked: Vec<(u8, bool)> = Vec::new();
+    let mut tup: (u8, bool) = (0, false);
+    tuple_boards.iter().for_each(|&t| {
+        if backlog_num == t.0 {
+            tup = (t.0, true);
+        } else {
+            tup = t;
         }
     });
-    row_vec
+    tup
 }
