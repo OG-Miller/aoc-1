@@ -1,5 +1,4 @@
-use std::fs::read_to_string;
-// AOC Day4A
+use std::fs::read_to_string; // AOC Day4A
 
 fn main() {
     //-------------  Build backlog of numbers to call -------------------------------
@@ -12,7 +11,6 @@ fn main() {
         .map(|n| n.parse::<u8>().unwrap())
         .collect::<Vec<u8>>();
     //println!("backlog_nums: {:?}", backlog_nums);
-// testing plugin
     //----------------- Build one vec of boards nums ---------------------------------
     let boards_string = read_to_string("./4a-bingo-boards.txt").unwrap();
     let alternative = boards_string.replace("\n", ",");
@@ -33,27 +31,30 @@ fn main() {
     //--- this will have to be recursive and take the returned vec from each backlog_num search and
     //use that in the next backlog_num search
 
-    //    let tester2 = find_backlog_in_all_boards(&all_boards_vec, 90);
-    //    println!("tester2: {:?}", tester2);
+    // let find_all_backlog_nums = backlog_nums
+    //     .iter()
+    //     .for_each(|&n| find_backlog_in_all_boards(&all_boards_vec, n));
+    // //.collect();
+    // println!("fin: {:?}", find_all_backlog_nums);
 }
 
 fn tester2(boards: Vec<Vec<(u8, bool)>>, backlog: Vec<u8>) {
-    let mut: inner_vec = Vec::new();
+    let mut inner_vec = Vec::new();
+    inner_vec.push(backlog.split_at(1));
     backlog
         .iter()
-        .for_each(|&n|{
-
-            find_backlog_in_all_boards(&all_boards_vec, n))
-        .collect();
-  
-};
+        .for_each(|&n| find_backlog_in_all_boards(&all_boards_vec, n))
+}
 
 //search all boards for one called number(to test for now)then iterate all backlog with this fn
+// This has to be recursive because each checked number bool has to be updated and passed into the
+// same fn again....
+//
 pub fn find_backlog_in_all_boards(
     boards: &Vec<Vec<(u8, bool)>>,
     called: u8,
 ) -> Vec<Vec<(u8, bool)>> {
-    let mut all_searched_boards = Vec::new();
+    let mut all_searched_boards: Vec<Vec<(u8, bool)>> = Vec::new();
     boards
         .iter()
         .for_each(|board| all_searched_boards.push(search_single_board(board, called)));
