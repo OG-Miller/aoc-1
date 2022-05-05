@@ -1,0 +1,88 @@
+use std::fs::read;
+use std::fs::read_to_string;
+
+// AOC Day4A
+
+fn main() {
+    // after the 4th number is called, a win is possible so start the checks
+    //
+    // checks: (per board)
+    // for each called number, take a board and check line by line if it matches,
+    // if yes: check if number to the right is in the called number list
+    // !(only numbers up to the current called number)
+    // if index 0 matches: keep counting  (no index zero then quit the line)
+    // if no line match, go to column match check:
+    // for each line check if index 0 is a match, yes? keep going, no, quit column
+
+    let boards_string = read_to_string("./4a-bingo-boards.txt").unwrap();
+    let called_num_vec = read("./4a-numbers.txt").unwrap();
+    //println!("called_num_vec: {:?}", called_num_vec);
+
+    //boards_string.lines().for_each(|l| println!("{l}"));
+    //println!("xxx : {:?}", boards_string.lines().nth(2));
+    //let testfn = boards_string.lines().for_each(|l| check_row2(l, 3));
+    let testfn = check_row2(boards_string, 3);
+    println!("{:?}", testfn);
+}
+// you need to first build the boards as Vec<Vec<u8>>
+// or.. use boards_string.lines.enumerate()
+//
+//-----------------------------------
+//fn check_row2(all_boards: String, called_num: u8) {
+//    all_boards.lines().for_each(|l| {
+//        if l.parse::<u8>() == called_num {
+//            println!("{:?} does equal {:?}", l, called_num);
+//        } else {
+//            println!("{l} does NOT equal {called_num}");
+//        }
+//    })
+//}
+//-------------------------------------
+//
+// ------------
+//fn check_row(board: Vec<Vec<u8>>, called_num: u8) {
+//    board[0].iter().for_each(|&row| {
+//        if row == called_num {
+//            println!("yup")
+//        } else {
+//            print!("nope")
+//        }
+//    });
+//}
+// ------------
+//boards.for_each row do: search_row(row)
+//fn search_row(s:&str){
+//   s.
+//}
+
+//----------------------------
+//
+//pub fn testie() -> u8 {
+//    let x = 40;
+//    x
+//}
+//
+//#[cfg(test)]
+//mod tests {
+//    use super::*;
+//
+//    #[test]
+//    fn test_testie() {
+//        testie();
+//        assert_eq!(40, testie());
+//    }
+//}
+
+// ---- better way to get most common digit (if there are only two options)
+
+//    let data: Vec<i8> = vec![1, 0, 0];
+//
+//    fn thing(v: Vec<i8>) -> i8 {
+//        let mut count: i8 = 0;
+//        v.iter()
+//            .for_each(|&n| if n == 1 as i8 { count += 1 } else { count -= 1 });
+//        count
+//    }
+//
+//    let that = thing(data);
+//    //    println!("{that}");

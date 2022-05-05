@@ -1,0 +1,52 @@
+use std::fs::read_to_string;
+fn main() {
+    // loop the lines
+    // get most common digit for same index of each line
+    //
+    //-----------------
+    //  let data_string = read_to_string("./data.txt")
+    //      .unwrap()
+    //      .lines()
+    //      .for_each(|l| println!("{l}"));
+    //  println!("{:?}", data_string);
+    //-----------------
+
+    let data_string = read_to_string("./data.txt").unwrap();
+
+    // this function should return most common digit for index on each line
+    fn one(s: String) {
+        let mut commons_vec: Vec<u64> = vec!['0'; 12];
+        let mut index: usize = 0;
+        let mut num_of_zeros: u64 = 0;
+        s.lines().for_each(|l| {
+            //index += 1;
+            if l.chars().nth(index).unwrap() == 0 {
+                //println!("{index}");
+                commons_vec[index] = l.chars().nth(index).unwrap();
+                //      num_of_zeros += 1;
+                //      vec.push()
+                //println!("{l}");
+                //      index = index + 1;
+            }
+            //println!("{:?}", l.chars().nth(index as usize).unwrap());
+            //commons_vec.push(num_of_zeros);
+        });
+        println!("commons_vec: {:?}", commons_vec);
+    }
+
+    one(data_string);
+    //let string_vec: Vec<&str> = data_string.split("\n").filter(|x| x.len() == 12).collect();
+
+    // let tester = data_string
+    //     //   .filter_map(|line| line.chars().nth(index as usize) == 1);
+    //     .map(|line| *line.unwrap());
+
+    // println!("{:?}", tester);
+}
+// lat the end separate logic into this function
+//fn result(v :Vec<&str>) -> u32{
+//
+//}
+
+// for each line, if l.chars().nth(index) == 0 {
+//

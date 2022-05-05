@@ -4,7 +4,7 @@ use std::fs::read_to_string;
 // return the number of how many times the depth increases (how many times the number goes up)
 
 fn main() {
-    let data_string = read_to_string("./data.txt").unwrap();
+    let data_string = read_to_string("./day1-data.txt").unwrap();
     let data_string_split = data_string.split("\n").collect();
     let number_vec: Vec<u32> = string_vec_to_num_vec(data_string_split);
 

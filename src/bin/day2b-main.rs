@@ -1,11 +1,11 @@
 use std::fs::read_to_string;
 
-// advent of code day 2
+// advent of code day 2B
 // calculate the final horizontal & depth positions, return them multiplied together
 
 fn main() {
-    // [0] = depth [1] = horizontal
-    let mut tuple_store: (u32, u32) = (0, 0);
+    // [0] = depth [1] = horizontal, [2] = aim
+    let mut triple_store: (u32, u32, u32) = (0, 0, 0);
 
     #[derive(Debug)]
     struct Command {
@@ -13,7 +13,7 @@ fn main() {
         val: u32,
     }
 
-    let data_string = read_to_string("./data.txt").unwrap();
+    let data_string = read_to_string("./day2a-data.txt").unwrap();
     let data_string_split: Vec<&str> = data_string.split("\n").collect();
 
     let command_vec_result: Vec<Command> = make_command_vec(data_string_split);
@@ -39,17 +39,19 @@ fn main() {
     }
 
     command_vec_result.iter().for_each(|com| {
-        // [0] = depth [1] = horizontal
+        // [0] = depth [1] = horizontal, [2] = aim
         if com.direction == "forward" {
-            tuple_store.1 += com.val;
+            triple_store.1 += com.val;
+            triple_store.0 += triple_store.2 * com.val;
         } else if com.direction == "down" {
-            tuple_store.0 += com.val;
+            triple_store.2 += com.val;
         } else if com.direction == "up" {
-            tuple_store.0 -= com.val;
-        } else {
-            println!(" in else block, case not covered");
+            triple_store.2 -= com.val;
         }
     });
 
-    println!("tuple_store multiplied{:?}", tuple_store.0 * tuple_store.1);
+    println!(
+        "triple_store multiplied: {:?}",
+        triple_store.0 * triple_store.1
+    );
 }

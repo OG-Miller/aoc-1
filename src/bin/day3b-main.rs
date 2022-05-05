@@ -3,7 +3,7 @@ use std::fs::read_to_string;
 // AOC Day3B
 
 fn main() {
-    let data_string = read_to_string("./data.txt").unwrap();
+    let data_string = read_to_string("./day3a-data.txt").unwrap();
     let half_of_data_len: u64 = &data_string.lines().count().try_into().unwrap() / 2 as u64;
     let total_zeros_vec = zeros_per_column(&data_string);
 
